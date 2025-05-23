@@ -1,0 +1,111 @@
+<!DOCTYPE HTML>
+<!--
+	Massively by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Contact Me - Satyavani Portfolio</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+
+        <!-- APM tracking script -->
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const apiUrl = "http://52.170.6.111:8000/apm/track_event/";
+        		const contactUrl = "http://52.170.6.111:8000/contact";
+				
+
+                // Track page load
+                fetch(apiUrl, {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({
+                        event_name: "page_load",
+                        page: "Contact Me"
+                    })
+                });
+
+                // Track form submit
+                document.addEventListener("submit", function(e) {
+                    if (e.target && e.target.id === "contactForm") {
+                        fetch(apiUrl, {
+                            method: "POST",
+                            headers: {"Content-Type": "application/json"},
+                            body: JSON.stringify({
+                                event_name: "form_submit",
+                                page: "Contact Me"
+                            })
+                        });
+                    }
+                });
+            });
+        </script>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<a href="index.html" class="logo">Contact Me</a>
+					</header>
+
+				<!-- Nav -->
+					<nav id="nav">
+						<ul class="links">
+							<li><a href="index.html">Projects</a></li>
+							<li><a href="generic.html">Certifications</a></li>
+							<li><a href="elements.html">Skills</a></li>
+							<li class="active"><a href="contact.html">Contact Me</a></li>
+						</ul>
+						<ul class="icons">
+							<li><a href="https://www.linkedin.com/in/vani-satya/" class="icon brands alt fa-linkedin"><span class="label">LinkedIn</span></a></li>
+							<li><a href="https://github.com/vanisatya" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+						</ul>
+					</nav>
+
+					<!-- Main -->
+					<section class="post">
+						<header class="major">
+							<h2>Contact Me</h2>
+						</header>
+
+						<form id="contactForm">
+							<div class="fields">
+								<div class="field half">
+									<label for="name">Name</label>
+									<input type="text" name="name" id="name" placeholder="Your Name" required style="color:white;" />
+								</div>
+								<div class="field half">
+									<label for="email">Email</label>
+									<input type="email" name="email" id="email" placeholder="Your Email" required style="color:white;" />
+								</div>
+								<div class="field">
+									<label for="message">Message</label>
+									<textarea name="message" id="message" rows="6" placeholder="Your Message" required style="color:white;" ></textarea>
+								</div>
+							</div>
+							<ul class="actions">
+								<li><input type="submit" value="Send Message" class="primary" /></li>
+							</ul>
+						</form>
+					</section>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
