@@ -1,6 +1,7 @@
-# main.py
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 from datetime import datetime
 import json
 import time
@@ -11,13 +12,13 @@ app = FastAPI()
 # Allow any frontend to call your API
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Replace with ["https://yourwebsite.com"] in production
+    allow_origins=["*"],  # Replace with your domain in production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Track metrics file
+# Directory and file to log metrics
 log_folder = "logs"
 os.makedirs(log_folder, exist_ok=True)
 metrics_file = os.path.join(log_folder, "apm_metrics.log")
@@ -27,14 +28,13 @@ def log_metric(data):
     with open(metrics_file, "a") as file:
         file.write(json.dumps(data) + "\n")
 
-# Middleware to track all API requests
+# ➡️ Middleware: Track all HTTP requests
 @app.middleware("http")
 async def track_api_performance(request: Request, call_next):
     start_time = time.time()
     try:
         response = await call_next(request)
     except Exception as e:
-        # Log unhandled exceptions as errors
         error_metric = {
             "type": "exception",
             "error": str(e),
@@ -57,7 +57,27 @@ async def track_api_performance(request: Request, call_next):
     log_metric(metric)
     return response
 
-# ➡️ For Throughput: Custom event tracker
+# ➡️ Serve static files like CSS, JS, images
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+# ➡️ Routes for static HTML pages
+@app.get("/", response_class=HTMLResponse)
+async def serve_homepage():
+    return FileResponse("static/index.html")
+
+@app.get("/generic.html", response_class=HTMLResponse)
+async def serve_certifications():
+    return FileResponse("static/generic.html")
+
+@app.get("/elements.html", response_class=HTMLResponse)
+async def serve_skills():
+    return FileResponse("static/elements.html")
+
+@app.get("/contact.html", response_class=HTMLResponse)
+async def serve_contact():
+    return FileResponse("static/contact.html")
+
+# ➡️ Custom event tracker (for throughput)
 @app.post("/apm/track_event/")
 async def track_event(event: dict):
     event["type"] = "custom_event"
@@ -65,7 +85,7 @@ async def track_event(event: dict):
     log_metric(event)
     return {"status": "success", "message": "Event tracked"}
 
-# ➡️ For Availability monitoring
+# ➡️ Health check endpoint
 @app.get("/health")
 async def health_check():
     return {"status": "UP", "time": datetime.utcnow().isoformat()}
